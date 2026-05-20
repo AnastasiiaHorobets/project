@@ -3,10 +3,8 @@ from pyspark.sql import DataFrame
 
 
 def clean_data(df: DataFrame) -> DataFrame:
-
     df_clean = (
-        df
-        .filter(col("trip_distance") > 0)
+        df.filter(col("trip_distance") > 0)
         .filter((col("fare_amount") > 0) & (col("fare_amount") < 500))
         .filter((col("passenger_count") >= 1) & (col("passenger_count") <= 6))
         .filter(col("tip_amount") >= 0)
@@ -15,15 +13,17 @@ def clean_data(df: DataFrame) -> DataFrame:
         .filter(col("tpep_dropoff_datetime") > col("tpep_pickup_datetime"))
         .withColumn(
             "trip_duration_minutes",
-            (unix_timestamp(col("tpep_dropoff_datetime")) -
-            unix_timestamp(col("tpep_pickup_datetime"))) / 60
+            (
+                unix_timestamp(col("tpep_dropoff_datetime"))
+                - unix_timestamp(col("tpep_pickup_datetime"))
+            )
+            / 60,
         )
-        .filter((col("trip_duration_minutes") > 0) & (col("trip_duration_minutes") < 180))
+        .filter(
+            (col("trip_duration_minutes") > 0) & (col("trip_duration_minutes") < 180)
+        )
     )
     return df_clean
-
-
-
 
 
 # # ====== Part 2 — Filtering & Cleaning ======
@@ -56,5 +56,5 @@ def clean_data(df: DataFrame) -> DataFrame:
 # df = spark.read.parquet("data/cleaned_trips")
 # df.select("trip_distance").count()
 # # df_clean.show()
-# # // We do it this way because first we create a new column, then compute the duration in minutes, and only after that we can apply filtering. 
-# # //Column does not exist → AnalysisException. 
+# # // We do it this way because first we create a new column, then compute the duration in minutes, and only after that we can apply filtering.
+# # //Column does not exist → AnalysisException.

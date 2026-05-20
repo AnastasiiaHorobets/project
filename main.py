@@ -14,12 +14,11 @@ from analysis import (
     create_zone_lookup,
     top_pickup_locations_by_revenue,
     cumulative_trips_by_day,
-    rank_hours_by_day
+    rank_hours_by_day,
 )
 
 spark = (
-    SparkSession.builder
-    .appName("NYC Yellow Taxi Trip Records (2023)")
+    SparkSession.builder.appName("NYC Yellow Taxi Trip Records (2023)")
     .master("local[*]")
     .getOrCreate()
 )
@@ -38,7 +37,7 @@ else:
     df.coalesce(3).write.mode("overwrite").parquet("data/cleaned_trips")
 
 
-# # 3760088 rows were removed.                                                      
+# # 3760088 rows were removed.
 # # representing 3.71% of the dataset
 
 
@@ -74,8 +73,8 @@ hourly_df.show()
 # # Task 4.2 — Tip behavior by payment type
 payment_df = tip_by_payment_type(df)
 payment_df.show(5)
-# # # Cash trips show 0% tip because tips are usually given in cash and are not recorded in the dataset. 
-# # # This does not mean that cash passengers tip less than card passengers. 
+# # # Cash trips show 0% tip because tips are usually given in cash and are not recorded in the dataset.
+# # # This does not mean that cash passengers tip less than card passengers.
 # # # The dataset is missing information about cash tips, so the results are incomplete.
 
 
@@ -101,13 +100,6 @@ rank_df = rank_hours_by_day(df)
 rank_df.filter(F.col("daily_hour_rank") == 1).show(10)
 
 
-
-
-
-
-
-
-
 # # # ===== Part 1 — Data Exploration =====
 # df_raw = spark.read.csv("data/trips", header=True, inferSchema=True)
 # # df_raw.printSchema()
@@ -123,9 +115,3 @@ rank_df.filter(F.col("daily_hour_rank") == 1).show(10)
 
 # # # print(df_raw.schema.names)
 # null_counts.show(truncate=False)
-
-
-
-
-
-
