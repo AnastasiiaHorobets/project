@@ -158,22 +158,3 @@ def rank_hours_by_day(df: DataFrame) -> DataFrame:
     window_part = Window.partitionBy("pickup_date").orderBy(desc("trip_count"))
     df = df.withColumn("daily_hour_rank", dense_rank().over(window_part))
     return df
-
-
-# # ===== Part 3 — Column Transformations ======
-# # Task 3.1 — time_of_day category
-
-# # hour_col = hour(col("tpep_pickup_datetime"))
-# # time_of_day_expr = (
-# #     when(hour_col.between(0, 5), "night")
-# #     .when(hour_col.between(6, 11), "morning")
-# #     .when(hour_col.between(12, 17), "afternoon")
-# #     .otherwise("evening")
-# # )
-# # df_clean = df_clean.withColumn("time_of_day", time_of_day_expr)
-# # df_clean.groupBy("time_of_day").count().show()
-
-# # # Task 3.2 — speed_mph and suspicious flag
-# # df_clean = df_clean.withColumn("speed_mph", (col("trip_distance") * 60) / col("trip_duration_minutes"))
-# # df_clean = df_clean.withColumn("is_suspicious_speed", when((col("speed_mph") > 80), True).otherwise(False))
-# # df_clean.groupBy("is_suspicious_speed").count().show()
